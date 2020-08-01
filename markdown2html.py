@@ -16,10 +16,12 @@ if __name__ == "__main__":
         while i < len(lines):
             line = lines[i]
             markup = line.split(" ", 1)
+
             if markup[0][0] == "#":
                 heading = len(markup[0])
                 fl.write("<h{}>".format(heading))
                 fl.write("{}</h{}>\n".format(markup[1][:-1], heading))
+
             if markup[0][0] == "-":
                 fl.write("<ul>\n")
                 while markup[0] == "-":
@@ -30,6 +32,18 @@ if __name__ == "__main__":
                     markup = lines[i].split(" ", 1)
                 fl.write("</ul>\n")
                 i -= 1
+
+            if markup[0][0] == "*":
+                fl.write("<ol>\n")
+                while markup[0] == "*":
+                    fl.write("<li>{}</li>\n".format(markup[1][:-1]))
+                    i += 1
+                    if i >= len(lines):
+                        break
+                    markup = lines[i].split(" ", 1)
+                fl.write("</ol>\n")
+                i -= 1
+
             i += 1
         f.close
         fl.close
