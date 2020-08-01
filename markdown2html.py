@@ -11,15 +11,25 @@ if __name__ == "__main__":
     try:
         f = open(sys.argv[1], 'r')
         fl = open(sys.argv[2], 'w')
-        for line in f:
+        lines = f.readlines()
+        i = 0
+        while i < len(lines):
+            line = lines[i]
             markup = line.split(" ", 1)
-            heading = len(markup[0])
             if markup[0][0] == "#":
-                fl.write("<h{}>\n".format(heading))
-                fl.write(markup[1])
-                fl.write("</h{}>\n".format(heading))
-        fl.close()
-        f.close()
+                heading = len(markup[0])
+                fl.write("<h{}>{}</h{}>\n".format(heading, markup[1][:-1], heading))
+            if markup[0][0] == "-":
+                fl.write("<ul>\n")
+                while markup[0] == "-":
+                    fl.write("<li>{}</li>\n".format(markup[1][:-1]))
+                    i += 1
+                    markup = lines[i].split(" ", 1)
+                fl.write("</ul>\n")
+                i -= 1
+            i += 1 
+        f.close
+        fl.close
     except OSError:
         sys.stderr.write("Missing " + sys.argv[1] + "\n")
         exit(1)
