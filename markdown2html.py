@@ -51,22 +51,15 @@ if __name__ == "__main__":
                     markup = lines[i].split(" ")
                     if lines[i] == "\n" or markup[0] in markups:
                         break
-                    if markup[0] in markups:
-                        print(markup[0])
                     paragraph.append(lines[i])
                     i += 1
                 if len(paragraph) == 1:
-                    print("<p>\n\t{}</p>".format(paragraph[0]))
                     fl.write("<p>\n\t{}</p>\n".format(paragraph[0]))
                 else:
-                    print("<p>")
                     for j in range(len(paragraph)):
-                        print("\t{}".format(paragraph[j]), end="")
                         fl.write("\t{}".format(paragraph[j]))
-                        if j < len(paragraph) -1:
-                            print("\t<br />")
+                        if j < len(paragraph) - 1:
                             fl.write("\t<br />\n")
-                    print("</p>")
                     fl.write("</p>\n")
             i += 1
         f.close
