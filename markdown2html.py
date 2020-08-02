@@ -45,22 +45,26 @@ if __name__ == "__main__":
                 fl.write("</ol>\n")
                 i -= 1
 
-            if markup[0][0] not in markups:
-                paragraph = []
-                while markup[0][0] not in markups and i < len(lines):
-                    markup = lines[i].split(" ")
-                    if lines[i] == "\n" or markup[0] in markups:
-                        break
-                    paragraph.append(lines[i])
-                    i += 1
-                if len(paragraph) == 1:
+            paragraph = []
+            while markup[0][0] not in markups and i < len(lines):
+                markup = lines[i].split(" ")
+                if lines[i] == "\n" or markup[0] in markups:
+                    break
+                paragraph.append(lines[i])
+                i += 1
+            if paragraph:
+                if len(paragraph) == 0:
+                    break
+                elif len(paragraph) == 1:
                     fl.write("<p>\n\t{}</p>\n".format(paragraph[0]))
+                    i -= 1
                 else:
                     for j in range(len(paragraph)):
                         fl.write("\t{}".format(paragraph[j]))
                         if j < len(paragraph) - 1:
                             fl.write("\t<br />\n")
                     fl.write("</p>\n")
+                    i -= 1
             i += 1
         f.close
         fl.close
