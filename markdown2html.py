@@ -12,17 +12,18 @@ if __name__ == "__main__":
         f = open(sys.argv[1], 'r')
         fl = open(sys.argv[2], 'w')
         lines = f.readlines()
+        markups = ["#", "-", "*"]
         i = 0
         while i < len(lines):
             line = lines[i]
             markup = line.split(" ", 1)
 
-            if markup[0][0] == "#":
+            if markup[0][0] == markups[0]:
                 heading = len(markup[0])
                 fl.write("<h{}>".format(heading))
                 fl.write("{}</h{}>\n".format(markup[1][:-1], heading))
 
-            if markup[0][0] == "-":
+            if markup[0][0] == markups[1]:
                 fl.write("<ul>\n")
                 while markup[0] == "-":
                     fl.write("<li>{}</li>\n".format(markup[1][:-1]))
@@ -33,7 +34,7 @@ if __name__ == "__main__":
                 fl.write("</ul>\n")
                 i -= 1
 
-            if markup[0][0] == "*":
+            if markup[0][0] == markups[2]:
                 fl.write("<ol>\n")
                 while markup[0] == "*":
                     fl.write("<li>{}</li>\n".format(markup[1][:-1]))
@@ -44,6 +45,29 @@ if __name__ == "__main__":
                 fl.write("</ol>\n")
                 i -= 1
 
+            if markup[0][0] not in markups:
+                paragraph = []
+                while markup[0][0] not in markups and i < len(lines):
+                    markup = lines[i].split(" ")
+                    if lines[i] == "\n" or markup[0] in markups:
+                        break
+                    if markup[0] in markups:
+                        print(markup[0])
+                    paragraph.append(lines[i])
+                    i += 1
+                if len(paragraph) == 1:
+                    print("<p>\n\t{}</p>".format(paragraph[0]))
+                    fl.write("<p>\n\t{}</p>\n".format(paragraph[0]))
+                else:
+                    print("<p>")
+                    for j in range(len(paragraph)):
+                        print("\t{}".format(paragraph[j]), end="")
+                        fl.write("\t{}".format(paragraph[j]))
+                        if j < len(paragraph) -1:
+                            print("\t<br />")
+                            fl.write("\t<br />\n")
+                    print("</p>")
+                    fl.write("</p>\n")
             i += 1
         f.close
         fl.close
