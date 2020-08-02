@@ -60,6 +60,7 @@ if __name__ == "__main__":
                     i -= 1
                 else:
                     for j in range(len(paragraph)):
+                        fl.write("<p>\n")
                         fl.write("\t{}".format(paragraph[j]))
                         if j < len(paragraph) - 1:
                             fl.write("\t<br />\n")
