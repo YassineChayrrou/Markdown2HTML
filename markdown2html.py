@@ -10,10 +10,10 @@ if __name__ == "__main__":
         if text is None:
             return None
         bold_match = re.findall('\*\*.*?\*\*', text)
-        em_match = re.findall('__.*?__', text)
         if bold_match:
             for word in bold_match:
                 text = text.replace(word, "<b>" + word[2:-2] + "</b>")
+        em_match = re.findall('__.*?__', text)
         if em_match:
             for word in em_match:
                 text = text.replace(word, "<em>" + word[2:-2] + "</em>")
