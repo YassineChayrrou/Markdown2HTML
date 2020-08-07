@@ -3,8 +3,21 @@
    the second is output file name
 """
 import sys
+import re
 
 if __name__ == "__main__":
+    def bold_emphasis_text(text):
+        if text is None:
+            return None
+        bold_match = re.findall('\*\*.*?\*\*', text)
+        em_match = re.findall('__.*?__', text)
+        if bold_match:
+            for word in bold_match:
+                text = text.replace(word, "<b>" + word[2:-2] + "</b>")
+        if em_match:
+            for word in em_match:
+                text = text.replace(word, "<em>" + word[2:-2] + "</em>")
+        return text
     if len(sys.argv) != 3:
         sys.stderr.write("Usage: ./markdown2html.py README.md README.html\n")
         exit(1)
@@ -16,6 +29,7 @@ if __name__ == "__main__":
         i = 0
         while i < len(lines):
             line = lines[i]
+            line = bold_emphasis_text(line)
             markup = line.split(" ", 1)
 
             if markup[0][0] == markups[0]:
@@ -34,7 +48,7 @@ if __name__ == "__main__":
                 fl.write("</ul>\n")
                 i -= 1
 
-            if markup[0][0] == markups[2]:
+            if markup[0][0] == markups[2] and len(markup[0]) == 1:
                 fl.write("<ol>\n")
                 while markup[0] == "*":
                     fl.write("<li>{}</li>\n".format(markup[1][:-1]))
@@ -50,7 +64,8 @@ if __name__ == "__main__":
                 markup = lines[i].split(" ")
                 if lines[i] == "\n" or markup[0] in markups:
                     break
-                paragraph.append(lines[i])
+                newText = bold_emphasis_text(lines[i])
+                paragraph.append(newText)
                 i += 1
             if paragraph:
                 if len(paragraph) == 0:
