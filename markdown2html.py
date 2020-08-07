@@ -11,12 +11,12 @@ if __name__ == "__main__":
             return None
         bold_match = re.findall('\*\*.*?\*\*', text)
         em_match = re.findall('__.*?__', text)
-        if bold_match:
-            for word in bold_match:
-                text = text.replace(word, "<b>" + word[2:-2] + "</b>")
         if em_match:
             for word in em_match:
                 text = text.replace(word, "<em>" + word[2:-2] + "</em>")
+        if bold_match:
+            for word in bold_match:
+                text = text.replace(word, "<b>" + word[2:-2] + "</b>")
         return text
     if len(sys.argv) != 3:
         sys.stderr.write("Usage: ./markdown2html.py README.md README.html\n")
