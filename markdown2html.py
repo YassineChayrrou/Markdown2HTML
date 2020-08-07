@@ -18,6 +18,7 @@ if __name__ == "__main__":
             for word in em_match:
                 text = text.replace(word, "<em>" + word[2:-2] + "</em>")
         return text
+
     if len(sys.argv) != 3:
         sys.stderr.write("Usage: ./markdown2html.py README.md README.html\n")
         exit(1)
@@ -40,7 +41,8 @@ if __name__ == "__main__":
             if markup[0][0] == markups[1]:
                 fl.write("<ul>\n")
                 while markup[0] == "-":
-                    fl.write("<li>{}</li>\n".format(markup[1][:-1]))
+                    listItem = bold_emphasis_text(markup[1])
+                    fl.write("<li>{}</li>\n".format(listItem[:-1]))
                     i += 1
                     if i >= len(lines):
                         break
