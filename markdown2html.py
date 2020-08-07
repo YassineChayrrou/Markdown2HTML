@@ -4,6 +4,7 @@
 """
 import sys
 import re
+import hashlib
 
 if __name__ == "__main__":
     def bold_emphasis_text(text):
@@ -19,6 +20,23 @@ if __name__ == "__main__":
                 text = text.replace(word, "<em>" + word[2:-2] + "</em>")
         return text
 
+    def but_why(text):
+        if text is None:
+            return None
+        removeC = re.findall('\(\(.*?\)\)', text)
+        if removeC:
+            for word in removeC:
+                text = text.replace(word, word[2:-2])
+                text = text.replace("c", "")
+                text = text.replace("C", "")
+        md5convert = re.findall('\[\[.*?\]\]', text)
+        if md5convert:
+            for word in md5convert:
+                result = hashlib.md5(word[2:-2].encode())
+                result = result.hexdigest()
+                text = text.replace(word, result)
+        return text
+
     if len(sys.argv) != 3:
         sys.stderr.write("Usage: ./markdown2html.py README.md README.html\n")
         exit(1)
@@ -31,6 +49,7 @@ if __name__ == "__main__":
         while i < len(lines):
             line = lines[i]
             line = bold_emphasis_text(line)
+            line = but_why(line)
             markup = line.split(" ", 1)
 
             if markup[0][0] == markups[0]:
@@ -42,6 +61,7 @@ if __name__ == "__main__":
                 fl.write("<ul>\n")
                 while markup[0] == "-":
                     listItem = bold_emphasis_text(markup[1])
+                    listItem = but_why(markup[1])
                     fl.write("<li>{}</li>\n".format(listItem[:-1]))
                     i += 1
                     if i >= len(lines):
@@ -73,11 +93,13 @@ if __name__ == "__main__":
                 if len(paragraph) == 0:
                     break
                 elif len(paragraph) == 1:
+                    paragraph[0] = but_why(paragraph[0])
                     fl.write("<p>\n\t{}</p>\n".format(paragraph[0]))
                     i -= 1
                 else:
                     fl.write("<p>\n")
                     for j in range(len(paragraph)):
+                        paragraph[j] = but_why(paragraph[j])
                         fl.write("\t{}".format(paragraph[j]))
                         if j < len(paragraph) - 1:
                             fl.write("\t<br />\n")
