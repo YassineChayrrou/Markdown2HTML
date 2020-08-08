@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 fl.write("<ul>\n")
                 while markup[0] == "-":
                     listItem = bold_emphasis_text(markup[1])
-                    listItem = but_why(markup[1])
+                    listItem = but_why(listItem)
                     fl.write("<li>{}</li>\n".format(listItem[:-1]))
                     i += 1
                     if i >= len(lines):
