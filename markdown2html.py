@@ -26,9 +26,9 @@ if __name__ == "__main__":
         removeC = re.findall('\(\(.*?\)\)', text)
         if removeC:
             for word in removeC:
-                text = text.replace(word, word[2:-2])
-                text = text.replace("c", "")
-                text = text.replace("C", "")
+                newword = word.replace("c", "")
+                newword = newword.replace("C", "")
+                text = text.replace(word, newword[2:-2])
         md5convert = re.findall('\[\[.*?\]\]', text)
         if md5convert:
             for word in md5convert:
